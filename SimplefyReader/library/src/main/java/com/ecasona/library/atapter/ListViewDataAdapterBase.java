@@ -25,11 +25,8 @@ import android.widget.BaseAdapter;
  * A adapter using View Holder to display the item of a list view;
  *
  * @param <T>
- * @author http://www.liaohuqiu.net
  */
 public abstract class ListViewDataAdapterBase<T> extends BaseAdapter {
-
-    private static final String LOG_TAG = "cube-list";
 
     protected ViewHolderCreator<T> mViewHolderCreator;
     protected ViewHolderCreator<T> mLazyCreator;
