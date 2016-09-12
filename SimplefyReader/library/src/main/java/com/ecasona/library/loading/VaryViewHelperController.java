@@ -23,7 +23,7 @@ public class VaryViewHelperController {
         this.helper = helper;
     }
 
-    public void showNetworkError(String errorMsg, View.OnClickListener listener) {
+    public void showNetworkError(View.OnClickListener listener) {
         View layout = helper.inflate(R.layout.message);
         TextView textView = (TextView) layout.findViewById(R.id.msessage_info);
         textView.setText(helper.getContext().getResources().getString(R.string.common_no_network_msg));

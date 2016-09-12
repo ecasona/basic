@@ -13,6 +13,9 @@ import com.ecasona.library.netstatus.NetChangeObserver;
 import com.ecasona.library.netstatus.NetStateReceiver;
 import com.ecasona.library.netstatus.NetUtils;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 /**
  * Created by AiYang on 2016/8/29.
@@ -40,6 +43,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * loading view controller
      */
     private VaryViewHelperController varyViewHelperController = null;
+
+    private Unbinder unbinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +88,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
+        unbinder = ButterKnife.bind(this);
         if (null != getLoadingTargetView()) {
             varyViewHelperController = new VaryViewHelperController(getLoadingTargetView());
         }
@@ -91,6 +97,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbinder.unbind();
         NetStateReceiver.removeRegisterObserver(mNetChangeObserver);
     }
 
@@ -264,12 +271,18 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         }
     }
 
-    protected void toggleShowNetworkError(boolean toogle, String msg, View.OnClickListener onClickListener) {
+    /**
+     * toggle show network error
+     *
+     * @param toggle
+     */
+    protected void toggleNetworkError(boolean toggle, View.OnClickListener onClickListener) {
         if (null == varyViewHelperController) {
-            throw new IllegalArgumentException("You mast return a right target view for loading");
+            throw new IllegalArgumentException("You must return a right target view for loading");
         }
-        if (toogle) {
-            varyViewHelperController.showNetworkError(msg, onClickListener);
+
+        if (toggle) {
+            varyViewHelperController.showNetworkError(onClickListener);
         } else {
             varyViewHelperController.restore();
         }

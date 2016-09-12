@@ -16,6 +16,9 @@ import com.ecasona.library.netstatus.NetUtils;
 
 import java.lang.reflect.Field;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by AiYang on 2016/8/31.
  * <p>
@@ -34,11 +37,6 @@ public abstract class BaseLazyFragment extends Fragment {
     protected Context context = null;
 
     /**
-     * network
-     */
-    protected NetChangeObserver mNetChangeObserver = null;
-
-    /**
      * loading view controller
      */
     private VaryViewHelperController varyViewHelperController = null;
@@ -47,6 +45,8 @@ public abstract class BaseLazyFragment extends Fragment {
     private boolean isFirstResume = true;
     private boolean isFirstVisible = true;
     private boolean isFirstInvisible = true;
+
+    protected Unbinder unbinder;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,6 +67,7 @@ public abstract class BaseLazyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //TODO 绑定注解（butterKnife）
+        unbinder = ButterKnife.bind(this,view);
         if (null != getLoadingTargetView()) {
             varyViewHelperController = new VaryViewHelperController(getLoadingTargetView());
         }
@@ -76,13 +77,14 @@ public abstract class BaseLazyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TAG_LOG = this.getClass().getSimpleName();
+        TAG_LOG = BaseLazyFragment.this.getClass().getSimpleName();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         //TODO butterKnife 解绑
+        unbinder.unbind();
     }
 
     @Override
@@ -332,12 +334,12 @@ public abstract class BaseLazyFragment extends Fragment {
         }
     }
 
-    protected void toggleShowNetworkError(boolean toogle, String msg, View.OnClickListener onClickListener) {
+    protected void toggleShowNetworkError(boolean toogle, View.OnClickListener onClickListener) {
         if (null == varyViewHelperController) {
             throw new IllegalArgumentException("You mast return a right target view for loading");
         }
         if (toogle) {
-            varyViewHelperController.showNetworkError(msg, onClickListener);
+            varyViewHelperController.showNetworkError(onClickListener);
         } else {
             varyViewHelperController.restore();
         }

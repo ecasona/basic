@@ -263,12 +263,12 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         }
     }
 
-    protected void toggleShowNetworkError(boolean toogle, String msg, View.OnClickListener onClickListener) {
+    protected void toggleShowNetworkError(boolean toogle, View.OnClickListener onClickListener) {
         if (null == varyViewHelperController) {
             throw new IllegalArgumentException("You mast return a right target view for loading");
         }
         if (toogle) {
-            varyViewHelperController.showNetworkError(msg, onClickListener);
+            varyViewHelperController.showNetworkError(onClickListener);
         } else {
             varyViewHelperController.restore();
         }
